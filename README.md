@@ -7,7 +7,7 @@ Script de  <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/mysql.s
 Script completo con veinticinco consultas sobre la base de datos de ejemplo Sakila. Se incluye un bonus con retos adicionales y casos más complejos.
 La base de datos Sakila simula la de un videoclub e incluye datos sobre películas, actores, clientes, alquileres, categorías, etc.
 
-### Arvhivos añadidos
+### Archivos añadidos
 - 'sakila_queries.sql'
 
 ### Requisitos
