@@ -71,10 +71,9 @@ SELECT
 	c.customer_id AS 'Identidad del cliente', 
     c.first_name AS 'Nombre del cliente',
     c.last_name AS 'Apellido del ciente', 
-    COUNT(r.rental_id) AS 'Cantidad alquilada' /* ¿Tendría sentido contar por r.customer_id?
-												Ambos cuentan lo mismo, pero rental_id cuenta cada uno
-												de los alquileres, está orientado a la pregunta. customer_id
-                                                únicamente se refiere al cliente */
+    COUNT(r.rental_id) AS 'Cantidad alquilada' /* En esta consulta, usamos COUNT(r.rental_id) para contar la cantidad 
+												total de películas alquiladas por cada cliente porque rental_id representa 
+                                                un registro único de cada alquiler realizado. */
 FROM
 	customer AS c
 INNER JOIN 
@@ -126,7 +125,7 @@ INNER JOIN
 GROUP BY
 	c.category_id;
 
--- ¿Si quisiera incluir las que no tienen alquileres podría ser aquí un LEFT?
+-- Usar LEFT JOIN en rental permite contar también categorías sin alquileres (la cantidad sería cero):
 
 SELECT
 	c.name AS 'Nombre categoría', 
@@ -139,7 +138,7 @@ INNER JOIN
 INNER JOIN
 	inventory AS i
 		ON fc.film_id = i.film_id
-LEFT JOIN -- ¿Si quisiera incluir las que no tienen alquileres podría ser aquí un LEFT?
+LEFT JOIN 
 	rental AS r
 		ON i.inventory_id = r.inventory_id
 GROUP BY
@@ -150,19 +149,6 @@ ORDER BY
 -- 12. Encuentra el promedio de duración de las películas para cada clasificación de la tabla film 
 -- y muestra la clasificación junto con el promedio de duración:
 
-/* Originalmente había complicado las cosas de más:
-
-SELECT
-	AVG(f.length) AS 'Duración',
-    f2.rating AS 'Clasificación'
-FROM
-	film AS f
-JOIN
-	film AS f2
-		ON f.film_id = f2.film_id
-GROUP BY
-	f2.rating;*/
-    
 SELECT
 	AVG(length) AS 'Duración',
 	rating AS 'Clasificación'
@@ -396,9 +382,9 @@ FROM
 JOIN
     film_actor AS fa2  -- aquí tenemos al actor 2 con su película
 		ON fa1.film_id = fa2.film_id 
-			AND fa1.actor_id < fa2.actor_id /*con esto se evita que se repitan (no puede aparecer un a2 con ID
-											-- mayor) y que se emparejen consigo mismos (un a1 no puede ser igual
-											-- a un a2*/
+			AND fa1.actor_id < fa2.actor_id /* con esto se evita que se repitan (no puede aparecer un a2 con ID
+											mayor) y que se emparejen consigo mismos (un a1 no puede ser igual
+											a un a2) */
 JOIN
     actor AS a1 
 		ON fa1.actor_id = a1.actor_id
